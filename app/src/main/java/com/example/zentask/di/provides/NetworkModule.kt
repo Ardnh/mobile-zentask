@@ -1,8 +1,5 @@
-package com.example.zentask.di
+package com.example.zentask.di.provides
 
-import com.example.zentask.data.source.remote.AuthApiService
-import com.example.zentask.data.source.remote.CategoryApiService
-import com.example.zentask.data.source.remote.ProjectApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

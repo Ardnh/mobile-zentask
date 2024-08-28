@@ -1,4 +1,4 @@
-package com.example.zentask.di
+package com.example.zentask.di.provides
 
 import com.example.zentask.data.source.remote.AuthApiService
 import com.example.zentask.data.source.remote.AuthRemoteDataSource
