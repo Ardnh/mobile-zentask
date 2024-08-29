@@ -6,15 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.zentask.ui.main.LoginFragment
-import com.example.zentask.ui.main.RegisterFragment
+import com.example.zentask.ui.main.LoginView
+import com.example.zentask.ui.main.ProjectDetailsView
+import com.example.zentask.ui.main.ProjectView
+import com.example.zentask.ui.main.RegisterView
 import com.example.zentask.ui.theme.ZenTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation("Android")
+                    Navigation()
                 }
             }
         }
@@ -37,23 +38,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Navigation(name: String, modifier: Modifier = Modifier) {
-
+fun Navigation() {
     val navController = rememberNavController()
+    
     NavHost(
         navController = navController,
-        startDestination = "loginfragment"
+        startDestination = "loginview"
     ) {
 
-        composable(route = "loginfragment") {
-            LoginFragment()
+        composable(route = "loginview") {
+            LoginView()
         }
 
-        composable(route = "registerfragment") {
-            RegisterFragment()
+        composable(route = "registerview") {
+            RegisterView()
         }
 
+        composable( route = "projectview" ) {
+            ProjectView()
+        }
 
+        composable( route = "projectdetailview" ) {
+            ProjectDetailsView()
+        }
 
     }
 
@@ -63,6 +70,6 @@ fun Navigation(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun NavigationPreview() {
     ZenTaskTheme {
-        Navigation("Android")
+        Navigation()
     }
 }
