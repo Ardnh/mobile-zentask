@@ -17,20 +17,12 @@ data class ProjectItem(
     val status: Boolean,
 )
 
-data class CreateProjectRequest(
-    val categoryId: String,
-    val userId: String,
-    val name: String,
-    val description: String,
-    val budget: Int,
-)
-
-data class UpdateProjectRequest(
-    val categoryId: String,
-    val userId: String,
-    val name: String,
-    val description: String,
-    val budget: Int,
+data class ProjectRequest(
+    val categoryId: String = "",
+    val userId: String = "",
+    val name: String = "",
+    val description: String = "",
+    val budget: Int = 0,
 )
 
 data class CreateProjectItemRequest(
@@ -85,12 +77,12 @@ data class ProjectItemResponse(
 )
 
 data class ProjectQueryParams(
-    val page: Int,
-    val pageSize: Int,
-    val projectName: String,
-    val sortDirection: String,
-    val categoryName: String,
-    val sortBy: String,
+    val page: Int = 1,
+    val pageSize: Int = 50,
+    val projectName: String = "",
+    val sortDirection: String = "asc",
+    val categoryName: String = "",
+    val sortBy: String = "date",
 )
 
 data class ProjectItemQueryParams(
