@@ -47,19 +47,19 @@ fun Navigation() {
     ) {
 
         composable(route = "loginview") {
-            LoginView()
+            LoginView(navController)
         }
 
         composable(route = "registerview") {
-            RegisterView()
+            RegisterView(navController)
         }
 
         composable( route = "projectview" ) {
-            ProjectView()
+            ProjectView(navController)
         }
 
         composable( route = "projectdetailview" ) {
-            ProjectDetailsView()
+            ProjectDetailsView(navController)
         }
 
     }
