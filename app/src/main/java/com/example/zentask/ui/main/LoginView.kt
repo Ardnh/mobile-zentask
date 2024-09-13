@@ -1,5 +1,6 @@
 package com.example.zentask.ui.main
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,8 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,10 +37,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -46,16 +48,27 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.zentask.R
+import com.example.zentask.data.model.SignInState
+import com.example.zentask.ui.theme.BackgroundColor
+import com.example.zentask.ui.theme.Gray100
+import com.example.zentask.ui.theme.NunitoBold
+import com.example.zentask.ui.theme.NunitoExtraBold
+import com.example.zentask.ui.theme.NunitoRegular
+import com.example.zentask.ui.theme.NunitoSemiBold
+import com.example.zentask.ui.theme.PrimaryColor
+import com.example.zentask.ui.theme.SecondaryColor
 import com.example.zentask.viewmodel.LoginViewModel
 
 @Composable
-fun LoginView(navController: NavController) {
+fun LoginView(signInState: SignInState, navController: NavController, onSignInClick: () -> Unit) {
 
     // Instance
     val loginViewModel: LoginViewModel = hiltViewModel<LoginViewModel>()
+    val context = LocalContext.current
 
     // State
     val loginRequest = loginViewModel.loginRequest.collectAsState()
+    val validationErrors = loginViewModel.validationErrors.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
     val isUsernameError by remember { mutableStateOf(false) }
     val isPasswordError by remember { mutableStateOf(false) }
@@ -79,10 +92,20 @@ fun LoginView(navController: NavController) {
         else -> Color(0xFFF1F3F4)
     }
 
+    LaunchedEffect(key1 = signInState.signInError) {
+        signInState.signInError?.let { error ->
+            Toast.makeText(
+                context,
+                error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(BackgroundColor),
         contentAlignment = Alignment.Center
     ) {
 
@@ -102,16 +125,18 @@ fun LoginView(navController: NavController) {
                     Text(
                         fontSize = 50.sp,
                         text = "Zen Task",
-                        color = Color(0xFF343a40),
-                        fontFamily = FontFamily(Font(R.font.nunito_extrabold))
+                        color = PrimaryColor,
+                        fontFamily = NunitoExtraBold
                     )
                     Text(
                         text = "Your minimalistic todolist app",
-                        color = Color(0xFFADB5BD),
-                        fontFamily = FontFamily(Font(R.font.nunito_regular)),
+                        color = SecondaryColor,
+                        fontFamily = NunitoRegular,
                         fontSize = 15.sp
                     )
                 }
+
+
 
                 Box(
                     modifier = Modifier
@@ -131,7 +156,7 @@ fun LoginView(navController: NavController) {
                             color = Color.Gray,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Light,
-                            fontFamily = FontFamily(Font(R.font.nunito_regular))
+                            fontFamily = NunitoRegular
                         ),
                         cursorBrush = SolidColor(Color.Gray),
                         decorationBox = { innerText ->
@@ -147,12 +172,13 @@ fun LoginView(navController: NavController) {
                                                 color = Color.Gray,
                                                 fontSize = 15.sp,
                                                 fontWeight = FontWeight.Light,
-                                                fontFamily = FontFamily(Font(R.font.nunito_regular))
+                                                fontFamily = NunitoRegular
                                             )
                                         )
                                     }
                                     innerText()
                                 }
+
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -168,15 +194,22 @@ fun LoginView(navController: NavController) {
                         .fillMaxWidth()
                         .height(25.dp)
                 ) {
-                    if (isUsernameTouched && loginRequest.value.username.isEmpty()) {
-                        Text(
-                            fontSize = 12.sp,
-                            text = "Username cannot be empty",
-                            color = Color.Red,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
+                    if (isUsernameTouched) {
+
+                        validationErrors.value.find { it.field == "username" }?.errors?.forEach { error ->
+                            Text(
+                                fontSize = 12.sp,
+                                text = error,
+                                color = Color.Red,
+                                fontFamily = NunitoRegular,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+
                     }
                 }
+
+
 
                 Box(
                     modifier = Modifier
@@ -216,7 +249,7 @@ fun LoginView(navController: NavController) {
                                         style = TextStyle(
                                             color = Color.Gray,
                                             fontSize = 15.sp,
-                                            fontFamily = FontFamily(Font(R.font.nunito_regular)),
+                                            fontFamily = NunitoRegular,
                                             fontWeight = FontWeight.Light
                                         )
                                     )
@@ -241,35 +274,64 @@ fun LoginView(navController: NavController) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(15.dp)
+                        .height(50.dp)
                 ) {
-                    if (isPasswordTouched && loginRequest.value.password.isEmpty()) {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 10.dp),
-                            fontSize = 12.sp,
-                            text = "Password cannot be empty",
-                            color = Color.Red
-                        )
+                    Column{
+                        if (isPasswordTouched) {
+                            validationErrors.value.find { it.field == "password" }?.errors?.forEach { error ->
+                                Text(
+                                    fontSize = 12.sp,
+                                    text = error,
+                                    color = Color.Red,
+                                    fontFamily = NunitoRegular,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                            }
+                        }
                     }
                 }
 
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
+                ){
+                    Text(
+                        fontFamily = NunitoSemiBold,
+                        text = "Forgot password ?",
+                        fontSize = 14.sp,
+                        color = PrimaryColor,
+                        modifier = Modifier.clickable {
+                            // navigate to forgot password view
+                        }
+                    )
+                }
+
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF153448))
                 ) {
-                    Text(text = "Login")
+                    Text(
+                        fontFamily = NunitoBold,
+                        fontSize = 14.sp,
+                        text = "Login",
+                        color = Color.White
+                    )
                 }
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 30.dp),
+                        .padding(vertical = 15.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "OR")
+                    Text(
+                        text = "Or",
+                        fontFamily = NunitoBold,
+                        color = PrimaryColor,
+                        fontSize = 14.sp
+                    )
                 }
 
                 Box(
@@ -277,7 +339,7 @@ fun LoginView(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(10.dp))
-                        .background(Color(0xFFF1F3F4))
+                        .background(Gray100)
                         .height(40.dp),
                 ) {
                     Row(
@@ -293,6 +355,8 @@ fun LoginView(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
+                            fontFamily = NunitoSemiBold,
+                            fontSize = 14.sp,
                             text = "Continue with google",
                             color = Color(0xFF343a40),
                         )
@@ -310,13 +374,15 @@ fun LoginView(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    fontFamily = FontFamily(Font(R.font.nunito_regular)),
+                    fontFamily = NunitoRegular,
                     text = "Don't have an account ? ",
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = Color(0xFF153448)
                 )
                 Text(
-                    fontFamily = FontFamily(Font(R.font.nunito_bold)),
+                    fontFamily = NunitoBold,
                     text = "Sign Up",
+                    color = PrimaryColor,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable {
