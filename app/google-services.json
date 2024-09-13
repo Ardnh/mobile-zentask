@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "500858752887",
+    "project_id": "android-project-app-c0f06",
+    "storage_bucket": "android-project-app-c0f06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500858752887:android:ab9d3d7f805f5effb59b72",
+        "android_client_info": {
+          "package_name": "com.example.zentask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500858752887-u94gfbvrc95fdkrd0sh4hjlr2u26hbso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLfyDupWQ2UpCIeZyyN5qz5JkredvR1O4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500858752887-u94gfbvrc95fdkrd0sh4hjlr2u26hbso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

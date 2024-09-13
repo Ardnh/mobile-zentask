@@ -2,20 +2,19 @@ package com.example.zentask.data.repository
 
 import com.example.zentask.data.model.CommonResponse
 import com.example.zentask.data.model.CreateProjectItemRequest
-import com.example.zentask.data.model.CreateProjectRequest
+import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectItemQueryParams
 import com.example.zentask.data.model.ProjectItemResponse
 import com.example.zentask.data.model.ProjectQueryParams
 import com.example.zentask.data.model.ProjectResponse
 import com.example.zentask.data.model.ResponseWithData
 import com.example.zentask.data.model.UpdateProjectItemRequest
-import com.example.zentask.data.model.UpdateProjectRequest
 import com.example.zentask.data.source.remote.ProjectRemoteDataSource
 import javax.inject.Inject
 
 interface ProjectRepository{
-    suspend fun createProject(req: CreateProjectRequest) : Result<CommonResponse?>
-    suspend fun updateProject(id: String, req: UpdateProjectRequest) : Result<CommonResponse?>
+    suspend fun createProject(req: ProjectRequest) : Result<CommonResponse?>
+    suspend fun updateProject(id: String, req: ProjectRequest) : Result<CommonResponse?>
     suspend fun deleteProject(id: String) : Result<CommonResponse?>
     suspend fun getAllProjects(params: ProjectQueryParams ) : Result<ResponseWithData<ProjectResponse>?>
     suspend fun  createProjectItem(req: CreateProjectItemRequest) : Result<CommonResponse?>
@@ -26,11 +25,11 @@ interface ProjectRepository{
 
 class ProjectRepositoryImpl @Inject constructor(private val apiService: ProjectRemoteDataSource) : ProjectRepository {
 
-    override suspend fun createProject(req: CreateProjectRequest): Result<CommonResponse?> {
+    override suspend fun createProject(req: ProjectRequest): Result<CommonResponse?> {
         return apiService.createProject(req)
     }
 
-    override suspend fun updateProject(id: String, req: UpdateProjectRequest): Result<CommonResponse?> {
+    override suspend fun updateProject(id: String, req: ProjectRequest): Result<CommonResponse?> {
         return apiService.updateProject(id, req)
     }
 

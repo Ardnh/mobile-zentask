@@ -2,14 +2,13 @@ package com.example.zentask.data.source.remote
 
 import com.example.zentask.data.model.CommonResponse
 import com.example.zentask.data.model.CreateProjectItemRequest
-import com.example.zentask.data.model.CreateProjectRequest
+import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectItemQueryParams
 import com.example.zentask.data.model.ProjectItemResponse
 import com.example.zentask.data.model.ProjectQueryParams
 import com.example.zentask.data.model.ProjectResponse
 import com.example.zentask.data.model.ResponseWithData
 import com.example.zentask.data.model.UpdateProjectItemRequest
-import com.example.zentask.data.model.UpdateProjectRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -22,10 +21,10 @@ import javax.inject.Inject
 
 interface ProjectApiService {
     @POST("/projects")
-    suspend fun createProject(@Body req: CreateProjectRequest): Response<CommonResponse>
+    suspend fun createProject(@Body req: ProjectRequest): Response<CommonResponse>
 
     @PUT("/projects/{id}")
-    suspend fun updateProject(@Path("id") id: String,  @Body req: UpdateProjectRequest) : Response<CommonResponse>
+    suspend fun updateProject(@Path("id") id: String,  @Body req: ProjectRequest) : Response<CommonResponse>
 
     @DELETE("/projects/{id}")
     suspend fun deleteProject(@Path("id")  id: String) : Response<CommonResponse>
@@ -62,12 +61,12 @@ interface ProjectApiService {
 
 class ProjectRemoteDataSource @Inject constructor(private val projectApiService : ProjectApiService) {
 
-    suspend fun createProject(req: CreateProjectRequest): Result<CommonResponse?> {
+    suspend fun createProject(req: ProjectRequest): Result<CommonResponse?> {
         return handleApiCall { projectApiService.createProject(req) }
     }
 
     // Update an existing project by ID
-    suspend fun updateProject(id: String, req: UpdateProjectRequest): Result<CommonResponse?> {
+    suspend fun updateProject(id: String, req: ProjectRequest): Result<CommonResponse?> {
         return handleApiCall { projectApiService.updateProject(id, req) }
     }
 

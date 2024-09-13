@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun ProjectDetailsView(navController: NavController) {
-    Text(
-        text = "Hello Project details!"
-    )
+fun DashboardView(navController: NavController){
+    Text(text = "this is dashboard")
 }

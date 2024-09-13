@@ -13,5 +13,5 @@ data class ResponseWithData<T>(
 
 data class ValidationErrors(
     val field: String,
-    val error: MutableList<String> = mutableListOf(),
+    val errors: MutableList<String> = mutableListOf(),
 )
