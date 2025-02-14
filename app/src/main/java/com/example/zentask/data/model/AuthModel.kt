@@ -6,7 +6,7 @@ data class RegisterRequest(
 )
 
 data class LoginRequest(
-    var username: String = "",
+    var email: String = "",
     var password: String = ""
 )
 

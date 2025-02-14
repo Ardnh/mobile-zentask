@@ -8,6 +8,7 @@ import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.repository.ProjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,10 +24,16 @@ class ProjectViewModel @Inject constructor(projectRepository: ProjectRepository)
     private val _projectQueryParams = MutableStateFlow<ProjectQueryParams>(ProjectQueryParams())
     private val _onSuccessMessage = MutableStateFlow<String?>(null)
     private val _onErrorMessage = MutableStateFlow<String?>(null)
+    private val _searchProjectRequest = MutableStateFlow<String>("")
 
     // Getter
+    val searchProjectRequest: StateFlow<String> = _searchProjectRequest
+    val projectQueryParams: StateFlow<ProjectQueryParams> = _projectQueryParams
 
     // Actions
+    fun updateSearchField(value: String){
+        _searchProjectRequest.value = value
+    }
     fun updateField(fieldName: String, value: Any) {
         _projectRequest.update { currentRequest ->
             when (fieldName) {
@@ -40,9 +47,8 @@ class ProjectViewModel @Inject constructor(projectRepository: ProjectRepository)
         }
     }
 
-    // Remote
-
     suspend fun getProject() {
+
         viewModelScope.launch {
             val result = repository.getAllProjects(_projectQueryParams.value)
             result.fold(
@@ -113,6 +119,8 @@ class ProjectViewModel @Inject constructor(projectRepository: ProjectRepository)
         }
     }
 
-
+    fun setProjectQueryParams(params: ProjectQueryParams){
+        _projectQueryParams.value = params
+    }
 
 }

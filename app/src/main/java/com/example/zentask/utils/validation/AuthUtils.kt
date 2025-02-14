@@ -20,7 +20,7 @@ class AuthValidation {
         val errorsValidation = mutableListOf<ValidationErrors>()
 
         val validations = listOf(
-            Triple("username", !input.value.username.isValidInput(), "Username cannot be empty"),
+            Triple("username", !input.value.email.isValidInput(), "Username cannot be empty"),
             Triple("password", !input.value.password.isValidInput(), "Password cannot be empty"),
             Triple("password", !validatePassword(if(input.value.password.isValidInput()) input.value.password else ""), "Password must be at least 5 characters long.")
 

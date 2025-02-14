@@ -118,7 +118,7 @@ fun RegisterView(navController: NavController) {
                         .padding(1.dp)
                 ) {
                     BasicTextField(
-                        value = loginRequest.value.username,
+                        value = loginRequest.value.email,
                         interactionSource = interactionUsernameSource,
                         singleLine = true,
                         onValueChange = {
@@ -138,7 +138,7 @@ fun RegisterView(navController: NavController) {
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.CenterStart,
                             ) {
-                                if (loginRequest.value.username.isEmpty()) {
+                                if (loginRequest.value.email.isEmpty()) {
                                     Text(
                                         text = "Your username",
                                         style = TextStyle(
@@ -189,7 +189,7 @@ fun RegisterView(navController: NavController) {
                         .padding(1.dp)
                 ) {
                     BasicTextField(
-                        value = loginRequest.value.username,
+                        value = loginRequest.value.email,
                         interactionSource = interactionUsernameSource,
                         singleLine = true,
                         onValueChange = {
@@ -209,7 +209,7 @@ fun RegisterView(navController: NavController) {
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.CenterStart,
                             ) {
-                                if (loginRequest.value.username.isEmpty()) {
+                                if (loginRequest.value.email.isEmpty()) {
                                     Text(
                                         text = "Your email adress",
                                         style = TextStyle(

@@ -1,6 +1,5 @@
 package com.example.zentask.ui.main
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.zentask.R
-import com.example.zentask.data.model.SignInState
 import com.example.zentask.ui.theme.BackgroundColor
 import com.example.zentask.ui.theme.Gray100
 import com.example.zentask.ui.theme.NunitoBold
@@ -60,15 +58,16 @@ import com.example.zentask.ui.theme.SecondaryColor
 import com.example.zentask.viewmodel.LoginViewModel
 
 @Composable
-fun LoginView(signInState: SignInState, navController: NavController, onSignInClick: () -> Unit) {
+fun LoginView(navController: NavController) {
 
     // Instance
     val loginViewModel: LoginViewModel = hiltViewModel<LoginViewModel>()
     val context = LocalContext.current
 
     // State
-    val loginRequest = loginViewModel.loginRequest.collectAsState()
+    val shouldNavigateToDashboard by loginViewModel.shouldNavigateToDashboard.collectAsState()
     val validationErrors = loginViewModel.validationErrors.collectAsState()
+    val loginRequest by loginViewModel.loginRequest.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
     val isUsernameError by remember { mutableStateOf(false) }
     val isPasswordError by remember { mutableStateOf(false) }
@@ -92,15 +91,11 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
         else -> Color(0xFFF1F3F4)
     }
 
-    LaunchedEffect(key1 = signInState.signInError) {
-        signInState.signInError?.let { error ->
-            Toast.makeText(
-                context,
-                error,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
+     LaunchedEffect(shouldNavigateToDashboard){
+          if(shouldNavigateToDashboard){
+              navController.navigate("dashboardlayout")
+          }
+     }
 
     Box(
         modifier = Modifier
@@ -136,8 +131,6 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                     )
                 }
 
-
-
                 Box(
                     modifier = Modifier
                         .clip(shape)
@@ -145,7 +138,7 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                         .padding(1.dp)
                 ) {
                     BasicTextField(
-                        value = loginRequest.value.username,
+                        value = loginRequest.email,
                         interactionSource = interactionUsernameSource,
                         singleLine = true,
                         onValueChange = {
@@ -165,7 +158,7 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.CenterStart,
                                 ) {
-                                    if (loginRequest.value.username.isEmpty()) {
+                                    if (loginRequest.email.isEmpty()) {
                                         Text(
                                             text = "Your email adress",
                                             style = TextStyle(
@@ -209,22 +202,18 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                     }
                 }
 
-
-
                 Box(
                     modifier = Modifier
                         .clip(shape)
                         .background(Color.LightGray)
                         .border(
-                            1.4.dp,
-                            if (isUsernameError) Color.Red else passwordBorderColor,
-                            shape
+                            1.4.dp, if (isUsernameError) Color.Red else passwordBorderColor, shape
                         )
                         .padding(1.dp)
                         .focusRequester(FocusRequester.Default) // Request focus for this field
                 ) {
                     BasicTextField(
-                        value = loginRequest.value.password,
+                        value = loginRequest.password,
                         onValueChange = {
                             isPasswordTouched = true
                             loginViewModel.updateLoginField("password", it)
@@ -239,7 +228,7 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         interactionSource = interactionPasswordSource,
                         decorationBox = { innerTextField ->
-                            if (loginRequest.value.password.isEmpty()) {
+                            if (loginRequest.password.isEmpty()) {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.CenterStart
@@ -309,7 +298,9 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        loginViewModel.login()
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF153448))
                 ) {
                     Text(
@@ -340,7 +331,11 @@ fun LoginView(signInState: SignInState, navController: NavController, onSignInCl
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(10.dp))
                         .background(Gray100)
-                        .height(40.dp),
+                        .height(40.dp)
+                        .clickable{
+                                  //onSignInClick()
+                                  navController.navigate("dashboardview")
+                        },
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.Center,
