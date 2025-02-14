@@ -1,5 +1,8 @@
 package com.example.zentask.viewmodel
 
+import StorageManager
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zentask.data.model.LoginRequest
@@ -18,31 +21,31 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
-) : ViewModel() {
+class LoginViewModel @Inject constructor(application: Application, private val authRepository: AuthRepository) : ViewModel() {
 
     // Instance
     private val authUtils = AuthValidation()
-
+    val tokenManager = StorageManager(application)
 
     // State
     private val _loginRequest = MutableStateFlow(LoginRequest())
     private val _validationErrors = MutableStateFlow(mutableListOf<ValidationErrors>())
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     private val _signInState = MutableStateFlow(SignInState())
+    private val _shouldNavigateToDashboard = MutableStateFlow(false)
 
     // Getter
     val loginRequest: StateFlow<LoginRequest> get() = _loginRequest
     val validationErrors: StateFlow<List<ValidationErrors>> = _validationErrors
     val loginState: StateFlow<LoginState> = _loginState
     val signInState: StateFlow<SignInState> = _signInState
+    val shouldNavigateToDashboard = _shouldNavigateToDashboard
 
     // Actions to update fields
     fun updateLoginField(fieldName: String, value: String) {
         _loginRequest.update { currentRequest ->
             when (fieldName) {
-                "email" -> currentRequest.copy(username = value)
+                "email" -> currentRequest.copy(email = value)
                 "password" -> currentRequest.copy(password = value)
                 else -> currentRequest
             }
@@ -64,14 +67,21 @@ class LoginViewModel @Inject constructor(
             // Check if there are validation errors before making login request
             if (_validationErrors.value.isEmpty()) {
                 val result = authRepository.login(_loginRequest.value)
-
-                // Handle the result of the login attempt
                 result.fold(
                     onSuccess = { loginResponse ->
                         _loginState.value = LoginState.Success(loginResponse)
+                        if (loginResponse != null) {
+                            tokenManager.save("token", loginResponse.data.token)
+                            _shouldNavigateToDashboard.value = true
+                        }
+
+                        Log.d("Login", tokenManager.getItem("token") ?: "token kosong")
+                        Log.d("Login", loginResponse.toString())
                     },
                     onFailure = { error ->
                         _loginState.value = LoginState.Error(error.message ?: "Login failed")
+                        Log.d("Login", "Login on Error")
+                        Log.d("Login", error.toString())
                     }
                 )
             } else {
@@ -100,8 +110,8 @@ class LoginViewModel @Inject constructor(
 
 // Possible states for the login process
 sealed class LoginState {
-    object Idle : LoginState()
-    object Loading : LoginState()
+    data object Idle : LoginState()
+    data object Loading : LoginState()
     data class Success(val loginResponse: ResponseWithData<LoginResponse>?) : LoginState()
     data class Error(val message: String) : LoginState()
 }

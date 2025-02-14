@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)// Import the BoM for the Firebase platform
     implementation(platform(libs.firebase.bom))
     implementation(libs.play.services.auth.v2020) // Pastikan menggunakan versi terbaru
+    implementation("androidx.datastore:datastore-preferences:1.1.2")
 
 
     // Add the dependency for the Firebase Authentication library

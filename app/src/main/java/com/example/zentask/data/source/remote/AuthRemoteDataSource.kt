@@ -11,10 +11,10 @@ import retrofit2.http.POST
 import javax.inject.Inject
 
 interface AuthApiService {
-    @POST("/user/login")
+    @POST("user/login")
     suspend fun login(@Body req: LoginRequest): Response<ResponseWithData<LoginResponse>?>
 
-    @POST("/user/register")
+    @POST("user/register")
     suspend fun register(@Body req: RegisterRequest): Response<CommonResponse?>
 }
 
