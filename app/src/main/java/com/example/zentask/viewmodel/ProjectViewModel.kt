@@ -14,10 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProjectViewModel @Inject constructor(projectRepository: ProjectRepository) : ViewModel() {
+class ProjectViewModel @Inject constructor(private val repository: ProjectRepository) : ViewModel() {
 
     // Instance
-    private val repository = projectRepository
 
     // State
     private val _projectRequest = MutableStateFlow<ProjectRequest>(ProjectRequest())

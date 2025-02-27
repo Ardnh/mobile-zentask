@@ -1,6 +1,5 @@
 package com.example.zentask.data.repository
 
-import android.util.Log
 import com.example.zentask.data.model.CommonResponse
 import com.example.zentask.data.model.LoginRequest
 import com.example.zentask.data.model.LoginResponse
@@ -16,10 +15,6 @@ interface AuthRepository {
 class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: AuthRemoteDataSource): AuthRepository {
 
     override suspend fun login(req: LoginRequest): Result<ResponseWithData<LoginResponse>?> {
-
-        Log.d("Login", "login request")
-        Log.d("Login", "Request: $req")
-
         return remoteDataSource.login(req)
     }
 
