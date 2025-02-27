@@ -2,10 +2,10 @@ package com.example.zentask.data.source.remote
 
 import com.example.zentask.data.model.CommonResponse
 import com.example.zentask.data.model.CreateProjectItemRequest
-import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectItemQueryParams
 import com.example.zentask.data.model.ProjectItemResponse
 import com.example.zentask.data.model.ProjectQueryParams
+import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectResponse
 import com.example.zentask.data.model.ResponseWithData
 import com.example.zentask.data.model.UpdateProjectItemRequest
@@ -78,7 +78,12 @@ class ProjectRemoteDataSource @Inject constructor(private val projectApiService 
     // Get all projects with filtering and pagination
     suspend fun getAllProjects(req: ProjectQueryParams): Result<ResponseWithData<ProjectResponse>?> {
         return handleApiCall { projectApiService.getAllProjects(
-            page = req.page, pageSize = req.pageSize, projectName = req.projectName, sortDirection = req.sortDirection, categoryName = req.categoryName, sortBy = req.sortBy
+            page = req.page,
+            pageSize = req.pageSize,
+            projectName = req.projectName,
+            sortDirection = req.sortDirection,
+            categoryName = req.categoryName,
+            sortBy = req.sortBy
         )}
     }
 
@@ -100,7 +105,12 @@ class ProjectRemoteDataSource @Inject constructor(private val projectApiService 
     // Get project items with filtering and pagination
     suspend fun getAllProjectItem(projectId: String, req: ProjectItemQueryParams): Result<ResponseWithData<ProjectItemResponse>?> {
         return handleApiCall { projectApiService.getAllProjectItem(
-            id = projectId, page = req.page, pageSize = req.pageSize, projectName = req.projectName, sortDirection = req.sortDirection, sortBy = req.sortBy
+            id = projectId,
+            page = req.page,
+            pageSize = req.pageSize,
+            projectName = req.projectName,
+            sortDirection = req.sortDirection,
+            sortBy = req.sortBy
         ) }
     }
 

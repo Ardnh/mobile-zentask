@@ -31,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.zentask.ui.theme.NunitoRegular
 import com.example.zentask.viewmodel.ProjectViewModel
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProjectView(navController: NavController) {
@@ -45,18 +44,19 @@ fun ProjectView(navController: NavController) {
     val projectSearch by projectViewModel.searchProjectRequest.collectAsState()
 
     LaunchedEffect(Unit) {
-        projectViewModel.searchProjectRequest.collectLatest { projectSearch ->
-            Log.d("project", projectSearch)
-
+//        projectViewModel.searchProjectRequest.collectLatest { projectSearch ->
+//            Log.d("project", projectSearch)
+//
 //            val currentParams = projectViewModel.projectQueryParams.value
 //            val params = currentParams.copy(
 //                projectName = projectSearch
 //            )
 //            projectViewModel.setProjectQueryParams(params)
 //            projectViewModel.getProject()
-        }
+//        }
+        Log.d("project", "Run mounted project")
+        projectViewModel.getProject()
     }
-
 
 
 

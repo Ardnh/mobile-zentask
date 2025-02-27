@@ -2,10 +2,10 @@ package com.example.zentask.data.repository
 
 import com.example.zentask.data.model.CommonResponse
 import com.example.zentask.data.model.CreateProjectItemRequest
-import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectItemQueryParams
 import com.example.zentask.data.model.ProjectItemResponse
 import com.example.zentask.data.model.ProjectQueryParams
+import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.model.ProjectResponse
 import com.example.zentask.data.model.ResponseWithData
 import com.example.zentask.data.model.UpdateProjectItemRequest

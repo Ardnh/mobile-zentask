@@ -59,7 +59,16 @@ data class ProjectFilters(
 )
 
 data class ProjectResponse(
-    val items: Project,
+    val code: Int,
+    val message: String,
+    val processTime: Int,
+    val items: List<Project>,
+    val pagination: ProjectPagination,
+    val filters: ProjectFilters,
+)
+
+data class ProjectResponseData(
+    val items: List<Project>,
     val pagination: ProjectPagination,
     val filters: ProjectFilters,
 )
