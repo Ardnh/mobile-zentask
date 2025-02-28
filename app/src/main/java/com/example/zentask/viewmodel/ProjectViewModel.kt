@@ -3,6 +3,7 @@ package com.example.zentask.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.zentask.data.model.Project
 import com.example.zentask.data.model.ProjectQueryParams
 import com.example.zentask.data.model.ProjectRequest
 import com.example.zentask.data.repository.ProjectRepository
@@ -19,6 +20,7 @@ class ProjectViewModel @Inject constructor(private val repository: ProjectReposi
     // Instance
 
     // State
+    private val _projectData = MutableStateFlow<List<Project>>(emptyList())
     private val _projectRequest = MutableStateFlow<ProjectRequest>(ProjectRequest())
     private val _projectQueryParams = MutableStateFlow<ProjectQueryParams>(ProjectQueryParams())
     private val _onSuccessMessage = MutableStateFlow<String?>(null)
@@ -28,6 +30,7 @@ class ProjectViewModel @Inject constructor(private val repository: ProjectReposi
     // Getter
     val searchProjectRequest: StateFlow<String> = _searchProjectRequest
     val projectQueryParams: StateFlow<ProjectQueryParams> = _projectQueryParams
+    val projectData: StateFlow<List<Project>> = _projectData
 
     // Actions
     fun updateSearchField(value: String){
@@ -49,10 +52,12 @@ class ProjectViewModel @Inject constructor(private val repository: ProjectReposi
     suspend fun getProject() {
 
         viewModelScope.launch {
+            Log.d("project", "Get project")
             val result = repository.getAllProjects(_projectQueryParams.value)
             result.fold(
                 onSuccess = {
-                    Log.d("ProjectViewModel", "Successfully get project: $it")
+                    _projectData.value = it?.data?.items ?: emptyList()
+                    Log.d("ProjectViewModel", "Successfully get project: ${_projectData.value}")
                     _onSuccessMessage.value = "Successfully get project!"
                 },
                 onFailure = {
