@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 interface CategoryApiService {
 
-    @GET("/category")
+    @GET("category")
     suspend fun getCategory(
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
@@ -27,13 +27,13 @@ interface CategoryApiService {
         @Query("sortBy") sortBy: String
     ): Response<ResponseWithData<CategoryResponse>>
 
-    @POST("/category")
+    @POST("category")
     suspend fun createCategory(@Body req: CreateCategoryRequest) : Response<CommonResponse>
 
-    @PUT("/category/{id}")
+    @PUT("category/{id}")
     suspend fun updateCategory(@Path("id") id: String, @Body req: UpdateCategoryRequest) : Response<CommonResponse>
 
-    @DELETE("/category/{:id}")
+    @DELETE("category/{:id}")
     suspend fun deleteCategory(@Path("id") id: String) : Response<CommonResponse>
 }
 

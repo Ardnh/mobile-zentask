@@ -9,8 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +47,7 @@ fun ProjectView(navController: NavController) {
 
     // State
     val interactionProjectSource = remember { MutableInteractionSource() }
+    val projectData by projectViewModel.projectData.collectAsState()
     val projectSearch by projectViewModel.searchProjectRequest.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -64,7 +71,7 @@ fun ProjectView(navController: NavController) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .padding(10.dp)
+            .padding(horizontal = 15.dp)
     ) {
         BasicTextField(
             value = projectSearch,
@@ -112,7 +119,56 @@ fun ProjectView(navController: NavController) {
     }
 
     // Category
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp)
+    ) {
+        LazyRow {
+            items(projectData.size) { index ->
+                AssistChip(
+                    modifier = Modifier
+                        .padding(end = 3.dp),
+                    onClick = { Log.d("Assist chip", "hello world") },
+                    label = { Text("Assist chip ${index}") }
+                )
+            }
+        }
+    }
 
     // List Project
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp)
+    ){
+        LazyColumn {
+
+            items(projectData.size) {index ->
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(vertical = 5.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        Text(
+                            fontWeight = FontWeight.SemiBold,
+                            text = projectData[index].name
+                        )
+                    }
+                }
+            }
+
+        }
+    }
 
 }

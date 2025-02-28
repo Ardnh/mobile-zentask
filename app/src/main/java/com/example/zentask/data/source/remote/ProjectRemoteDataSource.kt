@@ -20,16 +20,16 @@ import retrofit2.http.Query
 import javax.inject.Inject
 
 interface ProjectApiService {
-    @POST("/projects")
+    @POST("projects")
     suspend fun createProject(@Body req: ProjectRequest): Response<CommonResponse>
 
-    @PUT("/projects/{id}")
+    @PUT("projects/{id}")
     suspend fun updateProject(@Path("id") id: String,  @Body req: ProjectRequest) : Response<CommonResponse>
 
-    @DELETE("/projects/{id}")
+    @DELETE("projects/{id}")
     suspend fun deleteProject(@Path("id")  id: String) : Response<CommonResponse>
 
-    @GET("/projects")
+    @GET("projects")
     suspend fun getAllProjects(
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
@@ -39,16 +39,16 @@ interface ProjectApiService {
         @Query("sortBy") sortBy: String
     ) : Response<ResponseWithData<ProjectResponse>>
 
-    @POST("/project-item")
+    @POST("project-item")
     suspend fun createProjectItem(@Body req: CreateProjectItemRequest): Response<CommonResponse>
 
-    @PUT("/project-item/{id}")
+    @PUT("project-item/{id}")
     suspend fun updateProjectItem(@Path("id") id: String, @Body req: UpdateProjectItemRequest): Response<CommonResponse>
 
-    @DELETE("/project-item/{id}")
+    @DELETE("project-item/{id}")
     suspend fun deleteProjectItem(@Path("id") id: String): Response<CommonResponse>
 
-    @GET("/project-item")
+    @GET("project-item")
     suspend fun getAllProjectItem(
         @Path("project_id") id: String,
         @Query("page") page: Int,

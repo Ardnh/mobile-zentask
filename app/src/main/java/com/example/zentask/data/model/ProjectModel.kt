@@ -1,19 +1,35 @@
 package com.example.zentask.data.model
 
+import com.google.gson.annotations.SerializedName
+
+//data class Project(
+//    val id: String,
+//    @SerializedName("category_id") val categoryId: String,
+//    @SerializedName("user_id") val userId: String,
+//    val name: String,
+//    val description: String,
+//    val budget: Int,
+//)
+
 data class Project(
     val id: String,
+    @SerializedName("category_id")
     val categoryId: String,
+    @SerializedName("user_id")
     val userId: String,
     val name: String,
     val description: String,
-    val budget: Int,
+    val budget: Long,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String,
+    val category: Category,
 )
 
 data class ProjectItem(
     val id: String,
-    val projectId: String,
+    @SerializedName("project_id") val projectId: String,
     val name: String,
-    val budgetItem: Int,
+    @SerializedName("budget_item") val budgetItem: Int,
     val status: Boolean,
 )
 

@@ -1,8 +1,17 @@
 package com.example.zentask.data.model
 
+import com.google.gson.annotations.SerializedName
+
+//data class Category(
+//    val id: String,
+//    val name: String
+//)
+
 data class Category(
     val id: String,
-    val name: String
+    val name: String,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String,
 )
 
 data class CreateCategoryRequest(
